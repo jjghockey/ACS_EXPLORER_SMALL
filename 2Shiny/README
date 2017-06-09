@@ -1,1 +1,9 @@
-Shiny App
+Shiny App - This app is greatly stripped down in order to fit on shinyapps.io free tier.  The original app located ACS_EXPLORER
+contains all 50 states and an overall United States map and statistics.
+
+This version of the app only includes the Pacific (CA, OR, WA) and only includes the individual states with no overall 
+statistics or maps. 
+
+server.r
+ui.r
+
