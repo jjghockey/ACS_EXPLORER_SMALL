@@ -3,7 +3,7 @@
 #FileName		-	server.r								  										#
 #By				- 	Jeremy Guinta (ID 604882679)													#
 #																	  								#
-#Last Update Date:	5/7/2017									  									#
+#Last Update Date:	5/30/2017									  									#
 #																	  								#
 #Purpose:		-	Shiny App - ACS EXPLORER SMALL 													#
 #Notes:			- 																					#
@@ -95,6 +95,10 @@ shinyServer(function(input, output, session) {
 		unlink(temp)
 		unlink("ageDF.csv")
 		
+		ageDF[, age_cat:=ifelse(age_cat=="5", "05", age_cat)]
+		ageDF[, age_cat:=as.factor(age_cat)]
+		ageDF[, variable:=as.factor(variable)]
+		
 		rm(temp)
 		incProgress(1)
 		as.data.table(ageDF)
@@ -115,6 +119,11 @@ shinyServer(function(input, output, session) {
 		ageureducDF <- fread(unzip(paste(temp, ".zip", sep="")), showProgress=FALSE) 
 		unlink(temp)
 		unlink("ageureducDF.csv")
+		
+		ageureducDF[, educ:=factor(educ)]
+		ageureducDF[, variable:=factor(variable)]
+		ageureducDF[, unemp_cat:=factor(unemp_cat)]
+		ageureducDF[, age_cat:=factor(age_cat)]
 		
 		rm(temp)
 		incProgress(1)
@@ -221,6 +230,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -249,6 +260,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)		
 			
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -289,6 +302,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -319,6 +334,8 @@ shinyServer(function(input, output, session) {
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
 		})
 
+		gc(reset=TRUE)		
+		
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
 		observeEvent(input$plot2b_dblclick, {
@@ -362,6 +379,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -402,6 +421,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -446,6 +467,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -474,6 +497,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
 		})
+		
+		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -543,6 +568,7 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
 		})
+		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
