@@ -1,12 +1,12 @@
 #####################################################################################################
-#Engagement		-	UCLA MAS - STAT 405 - Project													#
+#Engagement		-	Shiny App - ACS Explorer														#
 #FileName		-	server.r								  										#
-#By				- 	Jeremy Guinta (ID 604882679)													#
+#By				- 	Jeremy Guinta 																	#
 #																	  								#
 #Last Update Date:	5/30/2017									  									#
 #																	  								#
 #Purpose:		-	Shiny App - ACS EXPLORER SMALL 													#
-#Notes:			- 																					#
+#Notes:			- 	https://github.com/jjghockey/													#
 #																									#
 #####################################################################################################
 
@@ -515,7 +515,7 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			scale_color_manual(values=c("#6495ED", "#800000", "#C90E17", "#691b14", "#08519c","#800000"))+
 			xlim(7,14)+
-			labs(colour="Gender", y="Density", x="Log Wages", title="Distribution of Wages (Female)", subtitle="")
+			labs(colour="Gender", y="Density", x="Log Wages", title="Distribution of Wages", subtitle="Full Time Workers")
 
 		})
 		

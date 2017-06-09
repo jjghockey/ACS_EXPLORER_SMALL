@@ -1,12 +1,12 @@
 #####################################################################################################
-#Engagement		-	UCLA MAS - STAT 405 - Project													#
+#Engagement		-	Shiny App - ACS Explorer														#
 #FileName		-	ui.r								  											#
-#By				- 	Jeremy Guinta (ID 604882679)													#
+#By				- 	Jeremy Guinta 																	#
 #																	  								#
 #Last Update Date:	5/30/2017									  									#
 #																	  								#
 #Purpose:		-	Shiny App																		#
-#Notes:			- 																					#
+#Notes:			- 	https://github.com/jjghockey/													#
 #																									#
 #####################################################################################################
 
