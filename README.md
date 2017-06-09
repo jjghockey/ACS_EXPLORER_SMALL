@@ -1,6 +1,6 @@
 # ACS_EXPLORER_SMALL
 
-Repository for a smaller version of the ACS EXPLORER that can fit into shinyapps.io.  The original version is located in ACS_EXPLORER and includes all 50 states. This version only includes the Pacific Northwest and the Southwest region of the United States.
+Repository for a smaller version of the ACS EXPLORER that can fit into shinyapps.io.  The original version is located in ACS_EXPLORER and includes all 50 states. This version only includes the Pacific (CA, OR, WA) region of the United States.
 
 Shiny APP to explore the American Community Survey Data
 
