@@ -28,7 +28,8 @@ titlePanel("American Community Survey - Statistical Snapshot For the Pacific - 2
 	#State Layout
 	sidebarLayout(
 		sidebarPanel(width = 2,
-			helpText("Select State"),	
+			helpText("Each map can be zoomed by click dragging a box and then double-clicking on the box.  Any double-click on the map will return to the full zoom view."),
+			helpText("Select State"),
 			selectInput("State", "State:", 
                   choice = list("State")	
 			)
@@ -38,7 +39,7 @@ titlePanel("American Community Survey - Statistical Snapshot For the Pacific - 2
 			tabsetPanel(
 				#Income
 				tabPanel("Income",
-					splitLayout(cellWidths = c("40%", "30%", "30%"),
+					splitLayout(cellWidths = c("50%", "50%"),
 						 plotOutput("plot3a", height="400px", width="80%",
 							dblclick = "plot3a_dblclick",
 							brush = brushOpts(

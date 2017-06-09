@@ -53,10 +53,8 @@ shinyServer(function(input, output, session) {
 		gc(reset=TRUE)
 		
 		stateDF[, pop:=factor(pop, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]
-		stateDF[, unemp_den:=factor(unemp_den, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]
-					
-		stateDF           #Something weird keeps appearing at the bottom right of the maps.  This will 
-						  #force the map to only produce the continental US.			
+		stateDF[, unemp_den:=factor(unemp_den, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]	
+		stateDF           
 	  })
     })
   })
@@ -417,7 +415,7 @@ shinyServer(function(input, output, session) {
 			geom_bar(data=subset(tmp, variable=="male"), stat="identity", position="identity", mapping=aes(y= -value))+
 			scale_y_continuous(labels = abs, limits = max(tmp$value) * c(-1,1)) +
 			theme(legend.position="right") +
-			scale_fill_manual(values=c('#6495ED','#800000')	)	+
+			scale_fill_manual(values=c('#800000', '#6495ED'))	+
 			labs(colour = "Gender", fill="Gender", x="Age", y="Population", title="Age and Population Pyramid")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+coord_flip()
@@ -436,7 +434,7 @@ shinyServer(function(input, output, session) {
 			geom_bar(data=subset(tmp, variable=="female", fill=variable), stat="identity", position="stack")+
 			geom_bar(data=subset(tmp, variable=="male", fill=variable), stat="identity", position="stack", mapping=aes(y= -ur))+
 			theme(legend.position="right")+
-			scale_fill_manual(values=c("#6495ED", "#800000", "#C90E17", "#691b14", "#08519c","#800000"))+
+			scale_fill_manual(values=c("#800000", "#6495ED"))+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+			
 			labs(colour = "Gender", fill="Gender", x="Age", y="Unemployment Rate", title="Age, Education, Unemployment, and Population Pyramid")+coord_flip()
@@ -503,25 +501,25 @@ shinyServer(function(input, output, session) {
 			m<-as.data.frame(tmp[sex==1, .(logwage, sex, stab)])
 			f<-as.data.frame(tmp[sex==2, .(logwage, sex, stab)])
 			
-			den_m<-density(m$logwage, kernel="gaussian", n=100)
-			den_f<-density(f$logwage, kernel="gaussian", n=100)
+			den_m<-density(m$logwage, kernel="gaussian", n=30)
+			den_f<-density(f$logwage, kernel="gaussian", n=30)
 			
 			den_m2<-data.frame(x=den_m$x, y=den_m$y, sex="Male")
 			den_f2<-data.frame(x=den_f$x, y=den_f$y, sex="Female")
 			
 			den<-rbind(den_m2, den_f2)
 			
-			ggplot(den, aes(x,y,color=as.factor(sex)))+geom_line()+
+			ggplot(den, aes(x,y,color=as.factor(sex)))+geom_line()+theme_bw()+
 			theme(legend.position="right")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			scale_color_manual(values=c("#6495ED", "#800000", "#C90E17", "#691b14", "#08519c","#800000"))+
 			xlim(7,14)+
-			labs(y="Density", x="Log Wages", title="Distribution of Wages (Female)", subtitle="")
+			labs(colour="Gender", y="Density", x="Log Wages", title="Distribution of Wages (Female)", subtitle="")
 
 		})
 		
-	rm(tmp, tbl1a, tbl1b, tbl3a, tbl3b, tbl4a, tbl4b)
+	rm(tmp, tbl1a, tbl1b, tbl3a, tbl3b, tbl4a, tbl4b,m,f,den_m,den_f,den_m2,den_f2,den)
 	gc(reset=TRUE)
 		
 }) #End of ShinyServer
