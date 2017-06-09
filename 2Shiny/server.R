@@ -52,8 +52,8 @@ shinyServer(function(input, output, session) {
 		stateDF[, pop:=factor(pop, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]
 		stateDF[, unemp_den:=factor(unemp_den, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]
 					
-		stateDF           #Something weird keeps appearing at the bottom right of the maps.  This will 
-						  #force the map to only produce the continental US.			
+		stateDF           
+						  	
 	  })
     })
   })
@@ -218,6 +218,8 @@ shinyServer(function(input, output, session) {
 		ranges <- reactiveValues(x = NULL, y = NULL)
 
 		output$plot1a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, zpop_grwth, group)] 
 			
@@ -248,6 +250,8 @@ shinyServer(function(input, output, session) {
 			})
 			
 		output$plot2a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, pop, group)] 
 			
@@ -290,6 +294,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot1b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, zpop_grwth, group)] 
 			
@@ -321,6 +327,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot2b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, pop, group)] 
 			
@@ -367,6 +375,8 @@ shinyServer(function(input, output, session) {
 		ranges <- reactiveValues(x = NULL, y = NULL)
 
 		output$plot3a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)	
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat,zavg_inc,group)] 
 			
@@ -409,6 +419,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot3b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, zavg_inc, group)] 
 			
@@ -455,6 +467,8 @@ shinyServer(function(input, output, session) {
 		ranges <- reactiveValues(x = NULL, y = NULL)
 
 		output$plot4a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, unemp_den, group)] 
 			
@@ -485,6 +499,8 @@ shinyServer(function(input, output, session) {
 			})
 			
 		output$plot5a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, zur, group)] 
 			
@@ -527,6 +543,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot4b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, unemp_den, group)] 
 			
@@ -556,6 +574,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot5b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, zur, group)] 
 			
@@ -603,6 +623,8 @@ shinyServer(function(input, output, session) {
 	
 		#State
 		output$plot6a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-AGEInput()
 			tmp<-tmp[stab==input$State,.(age_cat,stab, variable, value)] 
 			
@@ -619,6 +641,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot6b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-AGEInput()
 			tmp<-tmp[stab=="All",.(age_cat,stab, variable, value)] 
 			
@@ -637,6 +661,8 @@ shinyServer(function(input, output, session) {
 	
 		#State
 		output$plot7a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-AGEUREDUCInput()
 			tmp<-tmp[stab==input$State,.(age_cat,stab, variable, value, educ, ur)] 
 			
@@ -653,6 +679,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot7b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-AGEUREDUCInput()
 			tmp<-tmp[stab=="All",.(age_cat,stab, variable, value, educ, ur)] 
 			
@@ -671,6 +699,8 @@ shinyServer(function(input, output, session) {
 	#1. Wages
 		#State
 		output$plot8a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab==input$State & tp=="Wage",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
@@ -681,6 +711,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot8b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab=="All" & tp=="Wage",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
@@ -692,6 +724,8 @@ shinyServer(function(input, output, session) {
 	#2. Total Employment
 		#State
 		output$plot9a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab==input$State & tp=="Total",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
@@ -702,6 +736,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot9b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab=="All" & tp=="Total",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
@@ -714,6 +750,8 @@ shinyServer(function(input, output, session) {
 	#1. Wages
 		#State
 		output$plot10a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab==input$State & tp=="Wage",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
@@ -724,6 +762,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot10b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab=="All" & tp=="Wage",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
@@ -735,6 +775,8 @@ shinyServer(function(input, output, session) {
 	#2. Total Employment
 		#State
 		output$plot11a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab==input$State & tp=="Total",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
@@ -745,6 +787,8 @@ shinyServer(function(input, output, session) {
 		
 		#Southwest and Pacific Northwest
 		output$plot11b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab=="All" & tp=="Total",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
@@ -756,6 +800,8 @@ shinyServer(function(input, output, session) {
 #D. Wage Distribution
 
 		output$plot12a <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-WAGEInput()
 			tmp<-tmp[stab==input$State & is.na(logwage)==FALSE,]
 		
@@ -770,6 +816,8 @@ shinyServer(function(input, output, session) {
 		})
 		
 		output$plot12b <- renderPlot({
+			rm(tmp)
+			gc(reset=TRUE)
 			tmp<-WAGEInput()
 			tmp<-tmp[is.na(logwage)==FALSE,]
 		

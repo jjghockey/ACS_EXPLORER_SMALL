@@ -40,14 +40,14 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Income
 				tabPanel("Income",
 						splitLayout(cellWidths = c("50%", "50%"),
-							  plotOutput("plot3b", height="400px", width="100%",
+							  plotOutput("plot3b", height="300px", width="100%",
 								dblclick = "plot3b_dblclick",
 								brush = brushOpts(
 									id = "plot3b_brush",
 									resetOnNew = TRUE
 								)
 							),
-							plotOutput("plot12b", height="400px", width="100%")  #Wage Distribution 
+							plotOutput("plot12b", height="300px", width="100%")  #Wage Distribution 
 						),
 						fluidRow(title="Top 5 and Bottom 5 Average Wages by PUMA",
 						  tableOutput("tbl3b")
@@ -56,14 +56,14 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Population
 				tabPanel("Population",
 						splitLayout(cellWidths = c("50%", "50%")
-							, plotOutput("plot1b", height="400px", width="100%",
+							, plotOutput("plot1b", height="300px", width="100%",
 								dblclick = "plot1b_dblclick",
 								brush = brushOpts(
 									id = "plot1b_brush",
 									resetOnNew = TRUE
 								)
 							)
-							,plotOutput("plot2b", height="400px", width="100%",
+							,plotOutput("plot2b", height="300px", width="100%",
 								dblclick = "plot2b_dblclick",
 								brush = brushOpts(
 									id = "plot2b_brush",
@@ -78,14 +78,14 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Unemployment
 				tabPanel("Unemployment",
 						splitLayout(cellWidths = c("50%", "50%")
-							, plotOutput("plot4b", height="400px", width="100%",
+							, plotOutput("plot4b", height="300px", width="100%",
 								dblclick = "plot4b_dblclick",
 								brush = brushOpts(
 									id = "plot4b_brush",
 									resetOnNew = TRUE
 								)
 							)
-							,plotOutput("plot5b", height="400px", width="100%",
+							,plotOutput("plot5b", height="300px", width="100%",
 								dblclick = "plot5b_dblclick",
 								brush = brushOpts(
 									id = "plot5b_brush",
@@ -100,26 +100,26 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Other Graphics
 				tabPanel("Age",
 					fluidRow(
-						plotOutput("plot6b", height="400px", width="1000px")  #Age Pyramid
+						plotOutput("plot6b", height="300px", width="600px")  #Age Pyramid
 					),
 					fluidRow(
-					    plotOutput("plot7b", height="400px", width="1000px")  #Age Unemployment Pyramid
+					    plotOutput("plot7b", height="300px", width="600px")  #Age Unemployment Pyramid
 					)
 				),
 				tabPanel("Occupation",
 					fluidRow(
-							plotOutput("plot8b", height="400px", width="1000px")  #Occupation Wages
+							plotOutput("plot8b", height="300px", width="600px")  #Occupation Wages
 					),
 					fluidRow(
-							plotOutput("plot9b", height="400px", width="1000px")  #Occupation Employment				
+							plotOutput("plot9b", height="300px", width="600px")  #Occupation Employment				
 					)
 				),
 				tabPanel("Industry",
 					fluidRow(
-							plotOutput("plot10b", height="400px", width="1000px")  #Industry Wages
+							plotOutput("plot10b", height="300px", width="600px")  #Industry Wages
 					),
 					fluidRow(
-							plotOutput("plot11b", height="400px", width="1000px")  #Industry Employment					
+							plotOutput("plot11b", height="300px", width="600px")  #Industry Employment					
 					)	
 				)
 			)
@@ -139,14 +139,14 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Income
 				tabPanel("Income",
 					splitLayout(cellWidths = c("50%", "50%"),
-						 plotOutput("plot3a", height="400px", width="100%",
+						 plotOutput("plot3a", height="300px", width="100%",
 							dblclick = "plot3a_dblclick",
 							brush = brushOpts(
 								id = "plot3a_brush",
 								resetOnNew = TRUE
 							)
 						),
-						plotOutput("plot12a", height="400px", width="100%")  #Wage Distribution 
+						plotOutput("plot12a", height="300px", width="100%")  #Wage Distribution 
 					),
 				fluidRow(title="Top 5 and Bottom 5 Average Wages by PUMA",
 					 tableOutput("tbl3a")
@@ -155,14 +155,14 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Population
 				tabPanel("Population",
 					splitLayout(cellWidths = c("50%", "50%")
-						, plotOutput("plot1a", height="400px", width="100%",
+						, plotOutput("plot1a", height="300px", width="100%",
 							dblclick = "plot1a_dblclick",
 							brush = brushOpts(
 								id = "plot1a_brush",
 								resetOnNew = TRUE
 							)
 						)
-						,plotOutput("plot2a", height="400px", width="100%",
+						,plotOutput("plot2a", height="300px", width="100%",
 							dblclick = "plot2a_dblclick",
 							brush = brushOpts(
 								id = "plot2a_brush",
@@ -177,14 +177,14 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Unemployment
 				tabPanel("Unemployment",
 					splitLayout(cellWidths = c("50%", "50%")
-						, plotOutput("plot4a", height="400px", width="100%",
+						, plotOutput("plot4a", height="300px", width="100%",
 							dblclick = "plot4a_dblclick",
 							brush = brushOpts(
 								id = "plot4a_brush",
 								resetOnNew = TRUE
 							)
 						)
-						,plotOutput("plot5a", height="400px", width="100%",
+						,plotOutput("plot5a", height="300px", width="100%",
 							dblclick = "plot5a_dblclick",
 							brush = brushOpts(
 								id = "plot5a_brush",
@@ -199,26 +199,26 @@ titlePanel("American Community Survey - Statistical Snapshot For the Southwest a
 				#Other Graphics
 				tabPanel("Age",
 					fluidRow(
-						plotOutput("plot6a", height="400px", width="1000px")  #Age Pyramid
+						plotOutput("plot6a", height="300px", width="600px")  #Age Pyramid
 					),
 					fluidRow(
-					    plotOutput("plot7a", height="400px", width="1000px")  #Age Unemployment Pyramid
+					    plotOutput("plot7a", height="300px", width="600px")  #Age Unemployment Pyramid
 					)
 				),
 				tabPanel("Occupation", 
 					fluidRow(
-						plotOutput("plot8a", height="400px", width="1000px")  #Occupation Wages
+						plotOutput("plot8a", height="300px", width="600px")  #Occupation Wages
 					),
 					fluidRow(
-						plotOutput("plot9a", height="400px", width="1000px")  #Occupation Employment				
+						plotOutput("plot9a", height="300px", width="600px")  #Occupation Employment				
 					)
 				),
 				tabPanel("Industry",
 					fluidRow(
-						plotOutput("plot10a", height="400px", width="1000px")  #Industry Wages
+						plotOutput("plot10a", height="300px", width="600px")  #Industry Wages
 					),
 					fluidRow(
-						plotOutput("plot11a", height="400px", width="1000px")  #Industry Employment					
+						plotOutput("plot11a", height="300px", width="600px")  #Industry Employment					
 					)					
 				)
 			)
