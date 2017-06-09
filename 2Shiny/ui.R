@@ -3,7 +3,7 @@
 #FileName		-	ui.r								  											#
 #By				- 	Jeremy Guinta (ID 604882679)													#
 #																	  								#
-#Last Update Date:	5/7/2017									  									#
+#Last Update Date:	5/30/2017									  									#
 #																	  								#
 #Purpose:		-	Shiny App																		#
 #Notes:			- 																					#
@@ -25,107 +25,6 @@ titlePanel("American Community Survey - Statistical Snapshot For the Pacific - 2
 
     # ACS Viewer - Pacific
 	
-	#Pacific Layout
-	sidebarLayout(
-		sidebarPanel(width = 2,
-			helpText("Pacific")
-			,helpText("All Map graphs can be zoomed by click dragging a box and double-clicking on the area. 
-							Please allow several seconds for each plot and each tab to render.
-							The data is very big.")
-			
-		),
-		
-		mainPanel(
-			tabsetPanel(
-				#Income
-				tabPanel("Income",
-						splitLayout(cellWidths = c("40%", "30%", "30%"),
-							  plotOutput("plot3b", height="400px", width="80%",
-								dblclick = "plot3b_dblclick",
-								brush = brushOpts(
-									id = "plot3b_brush",
-									resetOnNew = TRUE
-								)
-							),
-							plotOutput("plot12b", height="400px", width="100%"),
-							plotOutput("plot13b", height="400px", width="100%") #Wage Distribution 
-						),
-						fluidRow(title="Top 5 and Bottom 5 Average Wages by PUMA",
-						  tableOutput("tbl3b")
-						) 
-					),
-				#Population
-				tabPanel("Population",
-						splitLayout(cellWidths = c("50%", "50%")
-							, plotOutput("plot1b", height="400px", width="80%",
-								dblclick = "plot1b_dblclick",
-								brush = brushOpts(
-									id = "plot1b_brush",
-									resetOnNew = TRUE
-								)
-							)
-							,plotOutput("plot2b", height="400px", width="80%",
-								dblclick = "plot2b_dblclick",
-								brush = brushOpts(
-									id = "plot2b_brush",
-									resetOnNew = TRUE
-								)
-							)
-						),
-						fluidRow(title="Top 5 and Bottom 5 Population Growth Rates by PUMA",
-						  tableOutput("tbl1b")
-						) 
-					),
-				#Unemployment
-				tabPanel("Unemployment",
-						splitLayout(cellWidths = c("50%", "50%")
-							, plotOutput("plot4b", height="400px", width="80%",
-								dblclick = "plot4b_dblclick",
-								brush = brushOpts(
-									id = "plot4b_brush",
-									resetOnNew = TRUE
-								)
-							)
-							,plotOutput("plot5b", height="400px", width="80%",
-								dblclick = "plot5b_dblclick",
-								brush = brushOpts(
-									id = "plot5b_brush",
-									resetOnNew = TRUE
-								)
-							)
-						),
-						fluidRow(title="Top 5 and Bottom 5 Unemployment Rates by PUMA",
-						  tableOutput("tbl4b")
-						) 
-					),	
-				#Other Graphics
-				tabPanel("Age",
-					fluidRow(
-						plotOutput("plot6b", height="300px", width="500px")  #Age Pyramid
-					),
-					fluidRow(
-					    plotOutput("plot7b", height="300px", width="500px")  #Age Unemployment Pyramid
-					)
-				),
-				tabPanel("Occupation",
-					fluidRow(
-							plotOutput("plot8b", height="300px", width="500px")  #Occupation Wages
-					),
-					fluidRow(
-							plotOutput("plot9b", height="300px", width="500px")  #Occupation Employment				
-					)
-				),
-				tabPanel("Industry",
-					fluidRow(
-							plotOutput("plot10b", height="300px", width="500px")  #Industry Wages
-					),
-					fluidRow(
-							plotOutput("plot11b", height="300px", width="500px")  #Industry Employment					
-					)	
-				)
-			)
-		)	
-	),
 	#State Layout
 	sidebarLayout(
 		sidebarPanel(width = 2,
