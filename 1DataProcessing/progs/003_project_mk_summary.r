@@ -10,7 +10,7 @@
 #Notes:			- 	These tables will be outputted and then processed by Shiny 						#
 #					The data is too large to allow for native or direct processing in Shiny			#
 #																									#
-#				-	This data is limited to the Southwest Region 									#
+#				-	This data is limited to the Pacfic Region (CA, OR, WA)							#
 #																									#
 #																									#
 #####################################################################################################
@@ -59,7 +59,7 @@
 		acs[, GEOID10:=paste(st, puma, sep="")]
 		acs[, GEOID10:=as.character(GEOID10)]
 		
-		acs<-acs[stab %in% c("CA", "NV", "AZ", "OR", "WA"),]
+		acs<-acs[stab %in% c("CA", "OR", "WA"),]
 	
 	#B. Mapping 
 		load("../data/state.rda") #Shape file and dataset for mapping with PUMA
@@ -72,11 +72,11 @@
 		
 		setkey(stateDF, GEOID10)
 		setkey(state, GEOID10)
-		nrow(stateDF) #6251300
+		nrow(stateDF) 
 		stateDF<-state[stateDF,]
-		nrow(stateDF) #6251300
+		nrow(stateDF) 
 		
-		stateDF<-stateDF[stab %in% c("CA", "NV", "AZ", "OR", "WA"), .(stab, GEOID10, long, lat, group, PUMA, my)]
+		stateDF<-stateDF[stab %in% c("CA", "OR", "WA"), .(stab, GEOID10, long, lat, group, PUMA, my)]
 		
 		gc(reset=TRUE)
 		
@@ -436,8 +436,8 @@
 	
 		wage_dist<-wage_dist[wage>1000,]
 		wage_dist<-wage_dist[, logwage:=log(wage)]
-		wage_dist<-wage_dist[, .(stab, logwage, sex)]
-						
+		wage_dist<-wage_dist[, .(logwage, stab, sex)]
+								
 #IV. Output - Limit all Data to Large Populous States
 
 	#Limit to select States	
