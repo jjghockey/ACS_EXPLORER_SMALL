@@ -3,7 +3,7 @@
 #FileName		-	server.r								  										#
 #By				- 	Jeremy Guinta (ID 604882679)													#
 #																	  								#
-#Last Update Date:	5/30/2017									  									#
+#Last Update Date:	5/7/2017									  									#
 #																	  								#
 #Purpose:		-	Shiny App - ACS EXPLORER SMALL 													#
 #Notes:			- 																					#
@@ -31,6 +31,9 @@ options(warn= -1)
 
 shinyServer(function(input, output, session) {
 
+	rm(tmp, tbl1a, tbl1b, tbl3a, tbl3b, tbl4a, tbl4b)
+	gc(reset=TRUE)
+
   # Load the MAP data
   MAPInput <- reactive({
     isolate({
@@ -52,8 +55,8 @@ shinyServer(function(input, output, session) {
 		stateDF[, pop:=factor(pop, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]
 		stateDF[, unemp_den:=factor(unemp_den, levels=c("0-0.9", "1-19.9", "20-89.9", "90-499.9", "500-1999.9", ">=2000"))]
 					
-		stateDF           
-						  	
+		stateDF           #Something weird keeps appearing at the bottom right of the maps.  This will 
+						  #force the map to only produce the continental US.			
 	  })
     })
   })
@@ -95,10 +98,6 @@ shinyServer(function(input, output, session) {
 		unlink(temp)
 		unlink("ageDF.csv")
 		
-		ageDF[, age_cat:=ifelse(age_cat=="5", "05", age_cat)]
-		ageDF[, age_cat:=as.factor(age_cat)]
-		ageDF[, variable:=as.factor(variable)]
-		
 		rm(temp)
 		incProgress(1)
 		as.data.table(ageDF)
@@ -119,11 +118,6 @@ shinyServer(function(input, output, session) {
 		ageureducDF <- fread(unzip(paste(temp, ".zip", sep="")), showProgress=FALSE) 
 		unlink(temp)
 		unlink("ageureducDF.csv")
-		
-		ageureducDF[, educ:=factor(educ)]
-		ageureducDF[, variable:=factor(variable)]
-		ageureducDF[, unemp_cat:=factor(unemp_cat)]
-		ageureducDF[, age_cat:=factor(age_cat)]
 		
 		rm(temp)
 		incProgress(1)
@@ -218,11 +212,9 @@ shinyServer(function(input, output, session) {
 		ranges <- reactiveValues(x = NULL, y = NULL)
 
 		output$plot1a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, zpop_grwth, group)] 
-			
+					
 			ggplot(tmp, aes(long, lat, group=group, fill=zpop_grwth))+geom_polygon()+
 			coord_fixed()+theme_bw()+theme(panel.grid.major = element_line(color="white"))+
 			scale_fill_gradient(low="#FFFFB2", high="#BD0026")+
@@ -232,8 +224,6 @@ shinyServer(function(input, output, session) {
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
 		})
-		
-		gc(reset=TRUE)
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -250,8 +240,6 @@ shinyServer(function(input, output, session) {
 			})
 			
 		output$plot2a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, pop, group)] 
 			
@@ -263,9 +251,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+
 		})
-		
-		gc(reset=TRUE)		
 			
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -290,12 +277,11 @@ shinyServer(function(input, output, session) {
 			caption = "Top 5 and Bottom 5 Population Growth by PUMA",
 			caption.placement = getOption("xtable.caption.placement", "bottom"), 
 			caption.width = getOption("xtable.caption.width", NULL)
+		
 		)
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot1b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, zpop_grwth, group)] 
 			
@@ -307,9 +293,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
+
 		})
-		
-		gc(reset=TRUE)
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -325,10 +310,8 @@ shinyServer(function(input, output, session) {
 			}
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific Northwest
 		output$plot2b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, pop, group)] 
 			
@@ -340,10 +323,9 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
+
 		})
 
-		gc(reset=TRUE)		
-		
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
 		observeEvent(input$plot2b_dblclick, {
@@ -364,9 +346,10 @@ shinyServer(function(input, output, session) {
 			tbl1b<-unique(rbind(head(tbl1b,5), tail(tbl1b,5)))
 			tbl1b<-as.data.table(tbl1b)
 		}, 
-			caption = "Southwest and Pacific Northwest: Top 5 and Bottom 5 Population Growth by PUMA",
+			caption = "Pacific: Top 5 and Bottom 5 Population Growth by PUMA",
 			caption.placement = getOption("xtable.caption.placement", "bottom"), 
 			caption.width = getOption("xtable.caption.width", NULL)
+
 		)	
 
 	#2. Income
@@ -375,8 +358,6 @@ shinyServer(function(input, output, session) {
 		ranges <- reactiveValues(x = NULL, y = NULL)
 
 		output$plot3a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)	
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat,zavg_inc,group)] 
 			
@@ -388,9 +369,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+
 		})
-		
-		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -415,26 +395,24 @@ shinyServer(function(input, output, session) {
 			caption = "Top 5 and Bottom 5 Average Income by PUMA",
 			caption.placement = getOption("xtable.caption.placement", "bottom"), 
 			caption.width = getOption("xtable.caption.width", NULL)
+
 		)
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot3b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, zavg_inc, group)] 
 			
 			ggplot(tmp, aes(long, lat, group=group, fill=zavg_inc))+geom_polygon()+
 			coord_fixed()+theme_bw()+theme(panel.grid.major = element_line(color="white"))+
 			scale_fill_gradient(low="#FFFFB2", high="#BD0026")+
-			labs(colour = "Average Income", fill="Average Income", x="", y="", title="Average Income", subtitle="Southwest and Pacific Northwest")+
+			labs(colour = "Average Income", fill="Average Income", x="", y="", title="Average Income", subtitle="Pacific")+
 			labs(xlab="", ylab="")+theme(legend.position="none")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
+
 		})
-		
-		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -456,9 +434,10 @@ shinyServer(function(input, output, session) {
 			tbl3b<-unique(rbind(head(tbl3b,5), tail(tbl3b,5)))
 			tbl3b<-as.data.table(tbl3b)
 		}, 
-			caption = "Southwest and Pacific Northwest: Top 5 and Bottom 5 Average Income by PUMA",
+			caption = "Pacific: Top 5 and Bottom 5 Average Income by PUMA",
 			caption.placement = getOption("xtable.caption.placement", "bottom"), 
 			caption.width = getOption("xtable.caption.width", NULL)
+
 		)	
 		
 	#3. Unemployment
@@ -467,8 +446,6 @@ shinyServer(function(input, output, session) {
 		ranges <- reactiveValues(x = NULL, y = NULL)
 
 		output$plot4a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, unemp_den, group)] 
 			
@@ -480,9 +457,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+			
 		})
-		
-		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -499,8 +475,6 @@ shinyServer(function(input, output, session) {
 			})
 			
 		output$plot5a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[stab==input$State,.(stab, long,lat, zur, group)] 
 			
@@ -512,9 +486,8 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+	
 		})
-		
-		gc(reset=TRUE)		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -539,23 +512,23 @@ shinyServer(function(input, output, session) {
 			caption = "Top 5 and Bottom 5 Unemployment Rate by PUMA",
 			caption.placement = getOption("xtable.caption.placement", "bottom"), 
 			caption.width = getOption("xtable.caption.width", NULL)
+
 		)
 		
-		#Southwest and Pacific Northwest
+		#Pacific 
 		output$plot4b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, unemp_den, group)] 
 			
 			ggplot(tmp, aes(long, lat, group=group, fill=unemp_den))+geom_polygon()+
 			coord_fixed()+theme_bw()+theme(panel.grid.major = element_line(color="white"))+
 			scale_fill_manual(values=c("#FFFFB2", "#FED976", "#FEB24C", "#FD8D3C", "#F03B20", "#BD0026"))+
-			labs(colour = "Unemployment Density", fill="Unemployment Density", x="", y="", title="Unemployment Density", subtitle="Southwest and Pacific Northwest")+
+			labs(colour = "Unemployment Density", fill="Unemployment Density", x="", y="", title="Unemployment Density", subtitle="Pacific")+
 			labs(xlab="", ylab="")+theme(legend.position="none")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
+
 		})
 
 		# When a double-click happens, check if there's a brush on the plot.
@@ -572,23 +545,21 @@ shinyServer(function(input, output, session) {
 			}
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot5b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-MAPInput()
 			tmp<-tmp[,.(long,lat, zur, group)] 
 			
 			ggplot(tmp, aes(long, lat, group=group, fill=zur))+geom_polygon()+
 			coord_fixed()+theme_bw()+theme(panel.grid.major = element_line(color="white"))+
 			scale_fill_gradient(low="#FFFFB2", high="#BD0026")+
-			labs(colour = "Unemployment Rate", fill="Unemployment Rate", x="", y="", title="Unemployment Rate", subtitle="Southwest and Pacific Northwest")+
+			labs(colour = "Unemployment Rate", fill="Unemployment Rate", x="", y="", title="Unemployment Rate", subtitle="Pacific")+
 			labs(xlab="", ylab="")+theme(legend.position="none")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			coord_cartesian(xlim = ranges$x_us, ylim = ranges$y_us, expand = FALSE)
+
 		})
-		
 
 		# When a double-click happens, check if there's a brush on the plot.
 		# If so, zoom to the brush bounds; if not, reset the zoom.
@@ -610,9 +581,10 @@ shinyServer(function(input, output, session) {
 			tbl4b<-unique(rbind(head(tbl4b,5), tail(tbl4b,5)))
 			tbl4b<-as.data.table(tbl4b)
 		}, 
-			caption = "Southwest and Pacific Northwest: Top 5 and Bottom 5 Unemployment Rate by PUMA",
+			caption = "Pacific: Top 5 and Bottom 5 Unemployment Rate by PUMA",
 			caption.placement = getOption("xtable.caption.placement", "bottom"), 
 			caption.width = getOption("xtable.caption.width", NULL)
+
 		)
 			
 #Summary Graphs
@@ -623,8 +595,6 @@ shinyServer(function(input, output, session) {
 	
 		#State
 		output$plot6a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-AGEInput()
 			tmp<-tmp[stab==input$State,.(age_cat,stab, variable, value)] 
 			
@@ -637,12 +607,11 @@ shinyServer(function(input, output, session) {
 			labs(colour = "Gender", fill="Gender", x="Age", y="Population", title="Age and Population Pyramid")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+coord_flip()
+
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot6b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-AGEInput()
 			tmp<-tmp[stab=="All",.(age_cat,stab, variable, value)] 
 			
@@ -652,17 +621,16 @@ shinyServer(function(input, output, session) {
 			scale_y_continuous(labels = abs, limits = max(tmp$value) * c(-1,1)) +
 			theme(legend.position="right") +
 			scale_fill_manual(values=c('#6495ED','#800000')	)	+
-			labs(colour = "Gender", fill="Gender", x="Age", y="Population", title="Age and Population Pyramid", subtitle="Southwest and Pacific Northwest")+
+			labs(colour = "Gender", fill="Gender", x="Age", y="Population", title="Age and Population Pyramid", subtitle="Pacific")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+coord_flip()
+
 		})
 
 	#2. Population / UR / Education 
 	
 		#State
 		output$plot7a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-AGEUREDUCInput()
 			tmp<-tmp[stab==input$State,.(age_cat,stab, variable, value, educ, ur)] 
 			
@@ -675,12 +643,11 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+			
 			labs(colour = "Gender", fill="Gender", x="Age", y="Unemployment Rate", title="Age, Education, Unemployment, and Population Pyramid")+coord_flip()
+		
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot7b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-AGEUREDUCInput()
 			tmp<-tmp[stab=="All",.(age_cat,stab, variable, value, educ, ur)] 
 			
@@ -692,118 +659,110 @@ shinyServer(function(input, output, session) {
 			scale_fill_manual(values=c("#6495ED", "#800000", "#C90E17", "#691b14", "#800000","#08519c"))+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+			
-			labs(colour = "Gender", fill="Gender", x="Age", y="Unemployment Rate", title="Age, Education, Unemployment, and Population Pyramid", subtitle="Southwest and Pacific Northwest")+coord_flip()
+			labs(colour = "Gender", fill="Gender", x="Age", y="Unemployment Rate", title="Age, Education, Unemployment, and Population Pyramid", subtitle="Pacific")+coord_flip()
+
 		})
 		
 #B. Occupation Bar Charts
 	#1. Wages
 		#State
 		output$plot8a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab==input$State & tp=="Wage",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
 			
 			ggplot(tmp, aes(occp_descr, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
 			labs(x="Occupation", y="Average Wage", title="Top 10 Occupations - Average Wages")+coord_flip()	
+
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot8b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab=="All" & tp=="Wage",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
 			
 			ggplot(tmp, aes(occp_descr, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
-			labs(x="Occupation", y="Average Wage", title="Top 10 Occupations - Average Wages", subtitle="Southwest and Pacific Northwest")+coord_flip()	
+			labs(x="Occupation", y="Average Wage", title="Top 10 Occupations - Average Wages", subtitle="Pacific")+coord_flip()	
+
 		})
 	
 	#2. Total Employment
 		#State
 		output$plot9a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab==input$State & tp=="Total",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
 			
 			ggplot(tmp, aes(occp_descr, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
 			labs(x="Occupation", y="Total Employment", title="Top 10 Occupations - Employment")+coord_flip()	
+
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot9b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-OCCPInput()
 			tmp<-tmp[stab=="All" & tp=="Total",]
 			tmp<-tmp[, occp_descr:=fct_reorder(occp_descr, value)]
 			
 			ggplot(tmp, aes(occp_descr, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
-			labs(x="Occupation", y="Total Employment", title="Top 10 Occupations - Employment", subtitle="Southwest and Pacific Northwest")+coord_flip()	
+			labs(x="Occupation", y="Total Employment", title="Top 10 Occupations - Employment", subtitle="Pacific")+coord_flip()	
+
 		})
 
 #C. Industry Bar Charts
 	#1. Wages
 		#State
 		output$plot10a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab==input$State & tp=="Wage",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
 			
 			ggplot(tmp, aes(ind, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
 			labs(x="Industry", y="Average Wage", title="Top 10 Industries - Average Wages")+coord_flip()	
+
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot10b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab=="All" & tp=="Wage",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
 			
 			ggplot(tmp, aes(ind, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
-			labs(x="Industry", y="Average Wage", title="Top 10 Industries - Average Wages", subtitle="Southwest and Pacific Northwest")+coord_flip()	
+			labs(x="Industry", y="Average Wage", title="Top 10 Industries - Average Wages", subtitle="Pacific")+coord_flip()	
 		})
 	
 	#2. Total Employment
 		#State
 		output$plot11a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab==input$State & tp=="Total",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
 			
 			ggplot(tmp, aes(ind, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
 			labs(x="Industry", y="Total Employment", title="Top 10 Industries - Employment")+coord_flip()	
+
+
 		})
 		
-		#Southwest and Pacific Northwest
+		#Pacific
 		output$plot11b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-INDInput()
 			tmp<-tmp[stab=="All" & tp=="Total",]
 			tmp<-tmp[, ind:=fct_reorder(ind, value)]
 			
 			ggplot(tmp, aes(ind, value))+geom_bar(fill="#6495ED", stat="identity")+theme_bw()+
-			labs(x="Industry", y="Total Employment", title="Top 10 Industries - Employment", subtitle="Southwest and Pacific Northwest")+coord_flip()	
-		})
+			labs(x="Industry", y="Total Employment", title="Top 10 Industries - Employment", subtitle="Pacific")+coord_flip()	
+
+
+	})
 		
 #D. Wage Distribution
 
 		output$plot12a <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-WAGEInput()
-			tmp<-tmp[stab==input$State & is.na(logwage)==FALSE,]
+			tmp<-tmp[stab==input$State & is.na(logwage)==FALSE & sex==1,]
 		
 			ggplot(tmp) + 
 			geom_histogram(aes(x=logwage, y=..density..), position="identity", bins=20, fill="#6495ED") + 
@@ -812,14 +771,13 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			xlim(7,14)+
-			labs(y="Density", x="Log Wages", title="Distribution of Wages", subtitle="")
+			labs(y="Density", x="Log Wages", title="Distribution of Wages (Male)", subtitle="")
+
 		})
 		
 		output$plot12b <- renderPlot({
-			rm(tmp)
-			gc(reset=TRUE)
 			tmp<-WAGEInput()
-			tmp<-tmp[is.na(logwage)==FALSE,]
+			tmp<-tmp[is.na(logwage)==FALSE & sex==1,]
 		
 			ggplot(tmp) + 
 			geom_histogram(aes(x=logwage, y=..density..), position="identity", bins=20, fill="#6495ED") + 
@@ -828,7 +786,41 @@ shinyServer(function(input, output, session) {
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
 			xlim(7,14)+
-			labs(y="Density", x="Log Wages", title="Distribution of Wages", subtitle="Southwest and Pacific Northwest")
-		})		
+			labs(y="Density", x="Log Wages", title="Distribution of Wages (Male)", subtitle="Pacific")
 
+		})		
+		
+		output$plot13a <- renderPlot({
+			tmp<-WAGEInput()
+			tmp<-tmp[stab==input$State & is.na(logwage)==FALSE & sex==2,]
+		
+			ggplot(tmp) + 
+			geom_histogram(aes(x=logwage, y=..density..), position="identity", bins=20, fill="#6495ED") + 
+			geom_density(aes(x=logwage,y=..density.., color="#800000"), size=1.0, bw="nrd", kernel="gaussian", n=20)+theme_bw()+
+			theme(legend.position="none")+
+			theme(plot.title = element_text(hjust = 0.5))+
+			theme(plot.subtitle = element_text(hjust = 0.5))+
+			xlim(7,14)+
+			labs(y="Density", x="Log Wages", title="Distribution of Wages (Female)", subtitle="")
+
+		})
+		
+		output$plot13b <- renderPlot({
+			tmp<-WAGEInput()
+			tmp<-tmp[is.na(logwage)==FALSE & sex==2,]
+		
+			ggplot(tmp) + 
+			geom_histogram(aes(x=logwage, y=..density..), position="identity", bins=20, fill="#6495ED") + 
+			geom_density(aes(x=logwage,y=..density.., color="#800000"), size=1.0, bw="nrd", kernel="gaussian", n=20)+theme_bw()+
+			theme(legend.position="none")+
+			theme(plot.title = element_text(hjust = 0.5))+
+			theme(plot.subtitle = element_text(hjust = 0.5))+
+			xlim(7,14)+
+			labs(y="Density", x="Log Wages", title="Distribution of Wages (Female)", subtitle="Pacific")
+
+		})			
+
+	rm(tmp, tbl1a, tbl1b, tbl3a, tbl3b, tbl4a, tbl4b)
+	gc(reset=TRUE)
+		
 }) #End of ShinyServer
