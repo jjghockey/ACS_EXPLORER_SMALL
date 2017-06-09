@@ -46,8 +46,7 @@ titlePanel("American Community Survey - Statistical Snapshot For the Pacific - 2
 								resetOnNew = TRUE
 							)
 						),
-						plotOutput("plot12a", height="400px", width="100%"),
-						plotOutput("plot13a", height="400px", width="100%") #Wage Distribution 
+						plotOutput("plot12a", height="400px", width="100%") #Wage Distribution
 					),
 				fluidRow(title="Top 5 and Bottom 5 Average Wages by PUMA",
 					 tableOutput("tbl3a")

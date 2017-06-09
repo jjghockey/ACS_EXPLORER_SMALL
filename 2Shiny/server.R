@@ -498,30 +498,24 @@ shinyServer(function(input, output, session) {
 
 		output$plot12a <- renderPlot({
 			tmp<-WAGEInput()
-			tmp<-tmp[stab==input$State & is.na(logwage)==FALSE & sex==1,]
+			tmp<-tmp[stab==input$State,]
 		
-			ggplot(tmp) + 
-			geom_histogram(aes(x=logwage, y=..density..), position="identity", bins=20, fill="#6495ED") + 
-			geom_density(aes(x=logwage,y=..density.., color="#800000"), size=1.0, bw="nrd", kernel="gaussian", n=20)+theme_bw()+
-			theme(legend.position="none")+
+			m<-as.data.frame(tmp[sex==1, .(logwage, sex, stab)])
+			f<-as.data.frame(tmp[sex==2, .(logwage, sex, stab)])
+			
+			den_m<-density(m$logwage, kernel="gaussian", n=100)
+			den_f<-density(f$logwage, kernel="gaussian", n=100)
+			
+			den_m2<-data.frame(x=den_m$x, y=den_m$y, sex="Male")
+			den_f2<-data.frame(x=den_f$x, y=den_f$y, sex="Female")
+			
+			den<-rbind(den_m2, den_f2)
+			
+			ggplot(den, aes(x,y,color=as.factor(sex)))+geom_line()+
+			theme(legend.position="right")+
 			theme(plot.title = element_text(hjust = 0.5))+
 			theme(plot.subtitle = element_text(hjust = 0.5))+
-			xlim(7,14)+
-			labs(y="Density", x="Log Wages", title="Distribution of Wages (Male)", subtitle="")
-
-		})
-		
-
-		output$plot13a <- renderPlot({
-			tmp<-WAGEInput()
-			tmp<-tmp[stab==input$State & is.na(logwage)==FALSE & sex==2,]
-		
-			ggplot(tmp) + 
-			geom_histogram(aes(x=logwage, y=..density..), position="identity", bins=20, fill="#6495ED") + 
-			geom_density(aes(x=logwage,y=..density.., color="#800000"), size=1.0, bw="nrd", kernel="gaussian", n=20)+theme_bw()+
-			theme(legend.position="none")+
-			theme(plot.title = element_text(hjust = 0.5))+
-			theme(plot.subtitle = element_text(hjust = 0.5))+
+			scale_color_manual(values=c("#6495ED", "#800000", "#C90E17", "#691b14", "#08519c","#800000"))+
 			xlim(7,14)+
 			labs(y="Density", x="Log Wages", title="Distribution of Wages (Female)", subtitle="")
 
